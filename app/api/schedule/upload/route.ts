@@ -35,22 +35,26 @@ export async function POST(request: NextRequest) {
 
         console.log(`Processing ${schedules.length} teachers...`);
 
-        // Step 1: Batch upsert all teachers
+        // Step 1: Prepare teacher data
         const teacherData = schedules.map(schedule => ({
             email: `${schedule.teacherName.replace(/\s+/g, '.').toLowerCase()}@school.com`,
             name: schedule.teacherName,
         }));
 
-        // Upsert teachers in batch
-        await Promise.all(
-            teacherData.map(data =>
-                prisma.teacher.upsert({
-                    where: { email: data.email },
-                    update: { name: data.name },
-                    create: data,
-                })
-            )
-        );
+        // Upsert teachers in smaller batches to avoid connection limits
+        const BATCH_SIZE = 10;
+        for (let i = 0; i < teacherData.length; i += BATCH_SIZE) {
+            const batch = teacherData.slice(i, i + BATCH_SIZE);
+            await Promise.all(
+                batch.map(data =>
+                    prisma.teacher.upsert({
+                        where: { email: data.email },
+                        update: { name: data.name },
+                        create: data,
+                    })
+                )
+            );
+        }
 
         // Step 2: Get all teachers with their IDs
         const teachers = await prisma.teacher.findMany({
