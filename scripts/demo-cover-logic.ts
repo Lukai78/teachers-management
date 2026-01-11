@@ -9,16 +9,16 @@ async function demonstrateCoverLogic() {
         include: { scheduleSlots: { take: 5 } }
     });
 
-    if (!absentTeacher || absentTeacher.schedules.length === 0) {
+    if (!absentTeacher || absentTeacher.scheduleSlots.length === 0) {
         console.log('No teacher or schedules found');
         return;
     }
 
     console.log(`Absent Teacher: ${absentTeacher.name}`);
-    console.log(`Sample schedule slots: ${absentTeacher.schedules.length}\n`);
+    console.log(`Sample schedule slots: ${absentTeacher.scheduleSlots.length}\n`);
 
     // Take the first slot
-    const slot = absentTeacher.schedules[0];
+    const slot = absentTeacher.scheduleSlots[0];
     console.log(`Looking for covers for:`);
     console.log(`  Day: ${slot.dayOfWeek}`);
     console.log(`  Time: ${slot.startTime} - ${slot.endTime}`);
