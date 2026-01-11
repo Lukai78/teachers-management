@@ -1,4 +1,5 @@
-import { pdfjs } from '@/lib/pdf-worker';
+// PDF parsing temporarily disabled for server-side compatibility
+// import { pdfjs } from '@/lib/pdf-worker';
 
 export interface ParsedScheduleSlot {
     dayOfWeek: string;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { parseSchedulePdf } from '@/lib/pdf-parser';
+// import { parseSchedulePdf } from '@/lib/pdf-parser'; // Disabled for server-side compatibility
 import { parseScheduleExcel } from '@/lib/excel-parser';
 import { prisma } from '@/lib/prisma';
 
@@ -19,12 +19,16 @@ export async function POST(request: NextRequest) {
         const fileName = file.name.toLowerCase();
 
         if (fileName.endsWith('.pdf')) {
-            schedules = await parseSchedulePdf(buffer);
+            // PDF upload temporarily disabled
+            return NextResponse.json(
+                { error: 'PDF upload is temporarily disabled. Please use Excel (.xlsx) files.' },
+                { status: 400 }
+            );
         } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
             schedules = await parseScheduleExcel(buffer);
         } else {
             return NextResponse.json(
-                { error: 'Unsupported file format. Please upload a PDF or Excel file.' },
+                { error: 'Unsupported file format. Please upload an Excel file (.xlsx).' },
                 { status: 400 }
             );
         }
