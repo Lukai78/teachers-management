@@ -6,7 +6,7 @@ async function demonstrateCoverLogic() {
     // Pick a teacher to be "absent"
     const absentTeacher = await prisma.teacher.findFirst({
         where: { name: { contains: 'Ms. OM Yuvatey' } },
-        include: { schedules: { take: 5 } }
+        include: { scheduleSlots: { take: 5 } }
     });
 
     if (!absentTeacher || absentTeacher.schedules.length === 0) {
