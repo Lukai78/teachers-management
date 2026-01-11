@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  scheduleSlots    ScheduleSlot[]
+  absences         Absence[]
+  coverAssignments CoverAssignment[]
+}
+
+model ScheduleSlot {
+  id        String  @id @default(uuid())
+  teacherId String
+  dayOfWeek String
+  startTime String
+  endTime   String
+  subject   String
+  classRoom String?
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId, dayOfWeek, startTime])
+}
+
+model Absence {
+  id               String            @id @default(uuid())
+  teacherId        String
+  date             DateTime
+  reason           String?
+  teacher          Teacher           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  coverAssignments CoverAssignment[]
+
+  @@index([date])
+}
+
+model CoverAssignment {
+  id                String   @id @default(uuid())
+  absenceId         String
+  coveringTeacherId String
+  date              DateTime
+  period            String
+  createdAt         DateTime @default(now())
+  
+  absence         Absence @relation(fields: [absenceId], references: [id], onDelete: Cascade)
+  coveringTeacher Teacher @relation(fields: [coveringTeacherId], references: [id], onDelete: Cascade)
+
+  @@index([date, period])
+}
