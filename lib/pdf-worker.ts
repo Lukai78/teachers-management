@@ -1,5 +1,5 @@
-// @ts-ignore - pdfjs-dist types may not be fully compatible
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.min.mjs';
+// PDF worker disabled for server-side compatibility
+// import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.min.mjs';
 
 // Set up the worker source
 // For Node.js without a browser environment, we might not strictly need the worker if we use `legacy` build or similar,
@@ -16,4 +16,5 @@ import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.min.mjs';
 // Actually for Node.js usage with pdfjs-dist v4+, we often need to be careful with imports.
 // This file centralizes the import.
 
-export { pdfjs };
+// Temporarily disabled - export empty object
+export const pdfjs = {} as any;
