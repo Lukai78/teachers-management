@@ -1,3 +1,4 @@
+// @ts-ignore - pdfjs-dist types may not be fully compatible
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.min.mjs';
 
 // Set up the worker source
